@@ -12,11 +12,10 @@ Note: This is a personal project and thus all contracts are unaudited. There are
     - pauses contract to prevent users from selling tokens
 
 ### Contracts: 
-All logic is handled in the ERC20 Token
+All logic is handled directly in the ERC20 Token.
 
 ### Addresses:
-#### Kovan Testnet:
-The contracts will be deployed to Kovan for testing since there is limited supply of sUSD on Optimistic Kovan.
-- sUSD: 0x99b267b9D96616f906D53c26dECf3C5672401282
+#### Opitmistic-Kovan Testnet:
+- sUSD: 0xaA5068dC2B3AADE533d3e52C6eeaadC6a8154c57
 - Aave Deposit: N/A
 - Uniswap: N/A
