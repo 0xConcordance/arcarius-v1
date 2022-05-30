@@ -5,38 +5,29 @@ import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol";
 import "@openzeppelin/contracts/security/Pausable.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
-import "./Interfaces/ILendingPoolAddressesProvider.sol";
 
 /// @custom:security-contact 0xconcordance@protonmail.com
 contract SafeWrappedDollar is ERC20, ERC20Burnable, Pausable, Ownable {
 
-    address aaveDeposit;
     address sUSDContractAddr;
     address chainLinkOracle;
-    address lendingPoolAddressProviderAddr;
-    IERC20 sUSDContract = IERC20(address(sUSDContractAddr)); 
+    address poolAddressProviderAddr;
 
-    /* 
-    AAVE ADDRESSES:
-        - PoolAddressesProvider
-        - 
-    */
+    IERC20 sUSDContract = IERC20(address(sUSDContractAddr)); 
+    IPoolAddressesProvider aavePoolAddressesProvider = IPoolAddressesProvider(poolAddressProviderAddr);
 
     constructor(
-        address _aaveDeposit, 
         address _sUSDContractAddr, 
         address _chainLinkOracle,
-        address _lendingPoolAddressProviderAddr
+        address _poolAddressProviderAddr
         ) 
         ERC20("safeWrappedDollar", "swUSD") {
-            aaveDeposit = _aaveDeposit;
             sUSDContractAddr = _sUSDContractAddr;
             chainLinkOracle = _chainLinkOracle;
-            lendingPoolAddressProviderAddr = _lendingPoolAddressProviderAddr;
+            poolAddressProviderAddr = _poolAddressProviderAddr;
         }
     
     
-
     function pause() public onlyOwner {
         _pause();
     }
@@ -65,17 +56,24 @@ contract SafeWrappedDollar is ERC20, ERC20Burnable, Pausable, Ownable {
     */
 
     function mintSafeUSD(uint _amount) public {
-        // transfer _amount to contract
-        //  deposit into aave
-        // mint _amount of tokens to user
 
+        IPool aavePoolContract = IPool(0x139d8F557f70D1903787e929D7C42165c4667229);
 
-        // mint sUSD
+        sUSDContract.transferFrom(msg.sender, address(this), _amount);
+        aavePoolContract.supply(sUSDContractAddr, _amount, address(this), 0);
+
+        // mint swUSD
         _mint(msg.sender, _amount);
+
     }
 
 }
 
-interface LendingPool {
-    function deposit(address _reserve, uint256 _amount, uint16 _referralCode) external;
+interface IPool {
+    function supply(address asset, uint256 amount, address onBehalfOf, uint16 referralCode) external;
+    function withdraw(address asset, uint256 amount, address to) external;
+}
+
+interface IPoolAddressesProvider {
+    function getPool() external view returns (address);
 }

@@ -12,10 +12,19 @@ Note: This is a personal project and thus all contracts are unaudited. There are
     - pauses contract to prevent users from selling tokens
 
 ### Contracts: 
-All logic is handled directly in the ERC20 Token.
+All logic is handled directly in the ERC20 Token. Why? Because it's easy. The protocol is not meant to be upgraded. 
 
 ### Addresses:
 #### Opitmistic-Kovan Testnet:
-- sUSD: 0xaA5068dC2B3AADE533d3e52C6eeaadC6a8154c57
-- Aave Deposit: N/A
+- sUSD: 0x6883D765088f90bAE62048dE45f2202D72985B01
+- Aave Pool: 0x139d8F557f70D1903787e929D7C42165c4667229
+- Aave PoolAddressesProvider: 0xD15d36975A0200D11B8a8964F4F267982D2a1cFe
 - Uniswap: N/A
+
+#### Aave v3 Deposit procedure
+- contract Pool
+	- function supply(address asset, uint256 amount, address onBehalfOf, uint16 referralCode) 
+	- function withdraw(address asset, uint256 amount, address to)
+
+- PoolAddressesProvider
+	- function getPool() external view override returns (address)
