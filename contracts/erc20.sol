@@ -56,10 +56,14 @@ contract SafeWrappedDollar is ERC20, ERC20Burnable, Pausable, Ownable {
     */
 
     function mintSafeUSD(uint _amount) public {
+        // initialize the contract
+        IPool aavePoolContract = IPool(address(0x139d8F557f70D1903787e929D7C42165c4667229));
 
-        IPool aavePoolContract = IPool(0x139d8F557f70D1903787e929D7C42165c4667229);
-
+        // transfer the users fund 
         sUSDContract.transferFrom(msg.sender, address(this), _amount);
+        sUSDContract.approve(address(0x139d8F557f70D1903787e929D7C42165c4667229), _amount);
+
+        // supply the funds to the aave Pool
         aavePoolContract.supply(sUSDContractAddr, _amount, address(this), 0);
 
         // mint swUSD

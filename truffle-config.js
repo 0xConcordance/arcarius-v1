@@ -18,8 +18,9 @@
  *
  */
 
-// const HDWalletProvider = require('@truffle/hdwallet-provider');
-//
+const HDWalletProvider = require('@truffle/hdwallet-provider');
+const mnemonic = "placeholder"
+
 // const fs = require('fs');
 // const mnemonic = fs.readFileSync(".secret").toString().trim();
 
@@ -42,7 +43,7 @@ module.exports = {
     // options below to some value.
     develop: {
       port: 8545
-    }
+    },
     // development: {
     //  host: "127.0.0.1",     // Localhost (default: none)
     //  port: 8545,            // Standard Ethereum port (default: none)
@@ -69,6 +70,14 @@ module.exports = {
     //   timeoutBlocks: 200,  // # of blocks before a deployment times out  (minimum/default: 50)
     //   skipDryRun: true     // Skip dry run before migrations? (default: false for public nets )
     // },
+    rinkeby: {
+      provider: function() { 
+        return new HDWalletProvider(mnemonic, "https://rinkeby.infura.io/v3/3b0b27f5a8e64001aa3381677acbcb2e");
+    },
+    network_id: 4,
+    gas: 4500000,
+    gasPrice: 10000000000,
+  },
     //
     // Useful for private networks
     // private: {
